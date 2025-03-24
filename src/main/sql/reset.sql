@@ -1,0 +1,18 @@
+DELETE FROM `QuizResultAnswer`;
+DELETE FROM `QuizResult`;
+DELETE FROM `QuizAnswer`;
+DELETE FROM `QuizQuestion`;
+DELETE FROM `Quiz`;
+
+DELETE FROM `StudentProfile`;
+DELETE FROM `Student`;
+
+
+
+
+ALTER TABLE `Student` AUTO_INCREMENT = 1;
+ALTER TABLE `Quiz` AUTO_INCREMENT = 1;
+ALTER TABLE `QuizQuestion` AUTO_INCREMENT = 1;
+ALTER TABLE `QuizAnswer` AUTO_INCREMENT = 1;
+ALTER TABLE `QuizResult` AUTO_INCREMENT = 1;
+ALTER TABLE `QuizResultAnswer` AUTO_INCREMENT = 1;
