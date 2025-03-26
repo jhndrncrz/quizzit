@@ -127,6 +127,7 @@ public class QuizController {
 
                 result.setStudentId(authenticatedStudent.getId());
                 result.setQuizId(quizId);
+                result.setIsSubmitted(false);
 
                 quizService.recordQuizResult(result);
             }
@@ -156,20 +157,12 @@ public class QuizController {
         Student authenticatedStudent = authService.getAuthenticatedStudent();
 
         this.randomizeQuizView = new RandomizeQuizView(authenticatedStudent.getProfile().getFirstName(),
-                quizService.findAllByStudentId(authenticatedStudent.getId()));
+                quizService.findAll());
 
         this.randomizeQuizView.displayView();
 
-        Quiz quiz = new Quiz();
-
-        quiz.setTitle("New Random Quiz");
-        quiz.setDescription("A new random quiz!");
+        Quiz quiz = randomizeQuizView.getQuiz();
         quiz.setCreatedBy(authenticatedStudent.getId());
-
-        for (var el : this.randomizeQuizView.getSelectedQuizIds()) {
-            System.out.format("%s, ", el);
-        }
-        System.console().readLine();
 
         try {
             this.quizService.randomizeQuiz(quiz, Integer.parseInt(this.randomizeQuizView.getAction()), this.randomizeQuizView.getSelectedQuizIds());

@@ -79,13 +79,30 @@ public class MeController {
         myDashboardView.reset();
     }
 
-    // public void getMyProfile() throws UnsupportedOperationException {
-    // if (!this.authService.isAuthenticated()) {
+    public void getMyProfile() throws SQLException {
+        if (!this.authService.isAuthenticated()) {
+            return;
+        }
 
-    // }
+        Student authenticatedStudent = authService.getAuthenticatedStudent();
 
-    // myProfileView.displayView();
-    // }
+        this.myProfileView = new MyProfileView(authenticatedStudent.getProfile().getFirstName(), authenticatedStudent);
+        this.myProfileView.displayView();
+
+        switch (this.myProfileView.getAction()) {
+            case "1" -> {
+                this.myProfileView.reset();
+
+                this.router.setRoute("/me");
+                this.router.displayRoute();
+            }
+            default -> {
+                return;
+            }
+        }
+
+        this.myQuizHistoryView.reset();
+    }
 
     public void getMyQuizzes() throws SQLException {
         if (!this.authService.isAuthenticated()) {

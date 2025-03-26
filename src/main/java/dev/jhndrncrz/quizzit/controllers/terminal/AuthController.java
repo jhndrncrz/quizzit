@@ -51,12 +51,12 @@ public class AuthController {
         if (!this.authService.isAuthenticated()) {
             this.loginView.reset();
 
-            this.router.setRoute("/auth/login");
-            this.router.displayRoute();
-
             System.out.println("-- Invalid credentials!");
             System.out.print("Press Enter to continue...");
             System.console().readLine();
+
+            this.router.setRoute("/auth/login");
+            this.router.displayRoute();
 
             return;
         }

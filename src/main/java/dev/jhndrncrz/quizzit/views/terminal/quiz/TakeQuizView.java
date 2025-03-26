@@ -71,6 +71,9 @@ public class TakeQuizView {
             while (!isActionValid) {
                 AppIO.clearScreen();
 
+                if (this.result.getId() != null) {
+                    this.currentQuestionIndex = Math.min(this.result.getAnswers().size(), this.quiz.getQuestions().size() - 1);
+                }
                 this.currentQuestion = this.quiz.getQuestions().get(this.currentQuestionIndex);
 
                 System.out.println("---------");
@@ -132,11 +135,11 @@ public class TakeQuizView {
     }
 
     public void setAction(String action) {
-        switch (action.trim()) {
-            case String s when s.length() == 1 && (0 <= s.toUpperCase().charAt(0) - 'A'
-                    && s.toUpperCase().charAt(0) - 'A' <= this.currentQuestion.getAnswers().size()) ->
-                this.isActionValid = true;
+        switch (action.trim().toUpperCase()) {
             case "PREV", "NEXT", "SAVE", "SUBMIT" -> this.isActionValid = true;
+            case String s when s.length() == 1 && (0 <= s.toUpperCase().charAt(0) - 'A'
+                    && s.toUpperCase().charAt(0) - 'A' < this.currentQuestion.getAnswers().size()) ->
+                this.isActionValid = true;
             default -> {
                 System.out.println("-- Invalid action!");
                 return;
@@ -145,36 +148,7 @@ public class TakeQuizView {
 
         this.action = action;
 
-        switch (action.trim()) {
-            case String s when 0 <= s.toUpperCase().charAt(0) - 'A'
-                    && s.toUpperCase().charAt(0) - 'A' <= this.currentQuestion.getAnswers().size() -> {
-                QuizResultAnswer resultAnswer;
-
-                if (this.result.getAnswers().stream()
-                        .anyMatch((answer) -> answer.getQuestionId() == this.currentQuestion.getId())) {
-                    resultAnswer = result.getAnswers().stream()
-                            .filter((answer) -> answer.getQuestionId() == this.currentQuestion.getId()).findFirst()
-                            .get();
-                } else {
-                    resultAnswer = new QuizResultAnswer();
-                }
-
-                QuizAnswer answer = this.currentQuestion.getAnswers().get(s.toUpperCase().charAt(0) - 'A');
-
-                if (result.getId() != null) {
-                    resultAnswer.setResultId(result.getId());
-                }
-                resultAnswer.setQuestionId(this.currentQuestion.getId());
-                resultAnswer.setAnswerId(answer.getId());
-                resultAnswer.setIsCorrect(answer.getIsCorrect());
-
-                if (!this.result.getAnswers().stream()
-                        .anyMatch((a) -> a.getQuestionId() == this.currentQuestion.getId())) {
-                    result.getAnswers().add(resultAnswer);
-                }
-
-                this.handleNextQuestion();
-            }
+        switch (action.trim().toUpperCase()) {
             case "PREV" -> {
                 this.handlePreviousQuestion();
             }
@@ -218,6 +192,35 @@ public class TakeQuizView {
                 this.isDisplaying = false;
                 return;
             }
+            case String s when 0 <= s.toUpperCase().charAt(0) - 'A'
+                    && s.toUpperCase().charAt(0) - 'A' < this.currentQuestion.getAnswers().size() -> {
+                QuizResultAnswer resultAnswer;
+
+                if (this.result.getAnswers().stream()
+                        .anyMatch((answer) -> answer.getQuestionId() == this.currentQuestion.getId())) {
+                    resultAnswer = result.getAnswers().stream()
+                            .filter((answer) -> answer.getQuestionId() == this.currentQuestion.getId()).findFirst()
+                            .get();
+                } else {
+                    resultAnswer = new QuizResultAnswer();
+                }
+
+                QuizAnswer answer = this.currentQuestion.getAnswers().get(s.toUpperCase().charAt(0) - 'A');
+
+                if (result.getId() != null) {
+                    resultAnswer.setResultId(result.getId());
+                }
+                resultAnswer.setQuestionId(this.currentQuestion.getId());
+                resultAnswer.setAnswerId(answer.getId());
+                resultAnswer.setIsCorrect(answer.getIsCorrect());
+
+                if (!this.result.getAnswers().stream()
+                        .anyMatch((a) -> a.getQuestionId() == this.currentQuestion.getId())) {
+                    result.getAnswers().add(resultAnswer);
+                }
+
+                this.handleNextQuestion();
+            }
             default -> {
                 System.out.println("-- Invalid action!");
                 return;
@@ -233,7 +236,7 @@ public class TakeQuizView {
 
     public void reset() {
         this.currentQuestionIndex = 0;
-        this.isResumable = false;
+        this.currentQuestion = null;
 
         this.action = "";
         this.isActionValid = false;

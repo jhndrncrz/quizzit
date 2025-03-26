@@ -117,7 +117,7 @@ public class StudentRepository {
                             `password`
                         )
                     VALUES
-                        (?, ?, ?)
+                        (?, ?, PASSWORD(?))
                 """;
 
         try (PreparedStatement statement = connection.prepareStatement(queryString, Statement.RETURN_GENERATED_KEYS)) {
@@ -169,7 +169,7 @@ public class StudentRepository {
                     SET
                         `student_number` = ?,
                         `username` = ?,
-                        `password` = ?
+                        `password` = PASSWORD(?)
                     WHERE
                         `id` = ?,
                 """;
@@ -195,7 +195,7 @@ public class StudentRepository {
                     FROM
                         `Student`
                     WHERE
-                        `username` = ? AND `password` = ?
+                        `username` = ? AND `password` = PASSWORD(?)
                 """;
 
         try (PreparedStatement statement = connection.prepareStatement(queryString)) {

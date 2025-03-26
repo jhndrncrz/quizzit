@@ -121,8 +121,6 @@ public class QuizQuestionRepository {
                         `QuizQuestion`
                     WHERE 
                         `quiz_id` = ?
-                    ORDER BY
-                        RAND()
                 """;
 
         try (PreparedStatement statement = connection.prepareStatement(queryString)) {

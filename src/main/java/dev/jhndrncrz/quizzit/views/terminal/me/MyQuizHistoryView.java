@@ -40,9 +40,9 @@ public class MyQuizHistoryView {
                     QuizResult result = iterator.next();
 
                     if (result.getIsSubmitted()) {
-                        System.out.format("[%d] %s (%d/%d, %.2f%%) - Quiz \"%s\" [%s]\n", iterator.nextIndex() + 1, result.getCreatedAt().toString(), result.getScore(), result.getQuiz().getQuestions().size(), 100.0 * result.getScore() / result.getQuiz().getQuestions().size(), result.getQuiz().getTitle(), "DONE");
+                        System.out.format("[%d] %s (%d/%d, %.2f%%) - Quiz \"%s\" [%s]\n", iterator.nextIndex(), result.getCreatedAt().toString(), result.getScore(), result.getQuiz().getQuestions().size(), 100.0 * result.getScore() / result.getQuiz().getQuestions().size(), result.getQuiz().getTitle(), "DONE");
                     } else {
-                        System.out.format("[%d] %s - Quiz \"%s\" [%s]\n", iterator.nextIndex() + 1, result.getCreatedAt().toString(), result.getQuiz().getTitle(), "PENDING");
+                        System.out.format("[%d] %s - Quiz \"%s\" [%s]\n", iterator.nextIndex(), result.getCreatedAt().toString(), result.getQuiz().getTitle(), "PENDING");
                     }
                 }
             }
